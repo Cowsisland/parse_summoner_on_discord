@@ -1,2 +1,0 @@
-cargo:rustc-env=TYPENUM_BUILD_OP=/home/vagrant/lol_parse_for_disc/parse_summoner/target/debug/build/typenum-65474cec100bfaa4/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/vagrant/lol_parse_for_disc/parse_summoner/target/debug/build/typenum-65474cec100bfaa4/out/op.rs
