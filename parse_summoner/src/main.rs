@@ -1,14 +1,11 @@
 extern crate url;
 extern crate reqwest;
 
-//use std::env;
 use std::env;
-// use std::path::Path;
 use std::fs::File;
 use std::io::BufReader;
 use std::collections::BTreeMap;
 use dotenv::dotenv;
-// use std::process;
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
 
@@ -277,8 +274,8 @@ impl EventHandler for Handler {
             if let Err(why) = msg.channel_id.say(&ctx.http, "Pong!") {
                 println!("Error sending message: {:?}", why);
             }
-        } else if msg.content.starts_with("!mastery") {
-            let sn: Vec<&str> = msg.content.split_whitespace().collect();
+        } else if msg.content.starts_with("mastery:") {
+            let sn: Vec<&str> = msg.content.split(":").collect();
             if sn.len() >= 2 {
                 match resp_mastery(sn[1]) {
                     Ok(data_vec) => {
@@ -291,13 +288,9 @@ impl EventHandler for Handler {
                         println!("{}", err);
                     }
                 }
-            } else {
-                if let Err(why) = msg.channel_id.say(&ctx.http, "!mastery SN を入力して下さい") {
-                    println!("Error sending message: {:?}", why);
-                }
             }
-        } else if  msg.content.starts_with("!rate") {
-            let sn: Vec<&str> = msg.content.split_whitespace().collect();
+        } else if  msg.content.starts_with("rate:") {
+            let sn: Vec<&str> = msg.content.split(":").collect();
             if sn.len() >= 2 {
                 match resp_league(sn[1]) {
                     Ok(data_vec) => {
@@ -309,10 +302,6 @@ impl EventHandler for Handler {
                     Err(err) => {
                         println!("{}", err);
                     }
-                }
-            } else {
-                if let Err(why) = msg.channel_id.say(&ctx.http, "!mastery SN を入力して下さい") {
-                    println!("Error sending message: {:?}", why);
                 }
             }
         } else if msg.content == "!hello" {
