@@ -11,7 +11,6 @@ use serde::{Deserialize, Serialize};
 
 
 
-// "RESPONSE BODY"から構造体を作成
 #[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
 #[allow(non_camel_case_types)]
@@ -25,7 +24,6 @@ struct Summoner_v4 {
     summonerLevel: i64
 }
 
-// // defaultトレイトを使って構造体を初期化
 impl Default for Summoner_v4 {
     fn default() -> Self {
         Self {
@@ -40,7 +38,6 @@ impl Default for Summoner_v4 {
     }
 }
 
-//  Summoner_v4の構造体を取得
 impl Summoner_v4 {
     fn fetch_summoner_v4(region: &str, name: &str, api_key: &str) -> Result<Self, Error> {
         let url = format! (
@@ -113,7 +110,6 @@ impl League_v4 {
 
 
 
-// response_bodyから構造体を作成
 #[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
 #[allow(non_camel_case_types)]
@@ -129,7 +125,6 @@ struct Champion_mastery_v4 {
     summonerId: String
 }
 
-// defaultトレイトを使って構造体を初期化
 impl Default for Champion_mastery_v4 {
     fn default() -> Self {
         Self{
@@ -146,7 +141,6 @@ impl Default for Champion_mastery_v4 {
     }
 }
 
-// Champion_mastery_v4の構造体を取得
 impl Champion_mastery_v4 {
     fn fetch_champion_mastery_v4(region: &str, summoner_id: &str, api_key: &str) -> Result<Vec<Self>, Error> {
         let url = format! (
@@ -184,7 +178,6 @@ fn resp_mastery(sn: &str) -> Result<Vec<String>, Error> {
     let api_key = &env::var("RIOT_API_KEY").expect("Please setting RIOT_API_KEY");
     let champ_id_map = get_champ_id_map();
    
-    // let name = sn;
     let name = sn;
     let region = "jp";
 
@@ -258,12 +251,11 @@ fn resp_league(sn: &str) -> Result<Vec<String>, Error> {
 
 
 
-
+// To use Discord
 
 use serenity::{
     model::{channel::Message, gateway::Ready},
     prelude::*,
-    //http::AttachmentType,
 };
 
 struct Handler;
@@ -303,30 +295,6 @@ impl EventHandler for Handler {
                         println!("{}", err);
                     }
                 }
-            }
-        } else if msg.content == "!hello" {
-            let msg = msg.channel_id.send_message(&ctx.http, |m| {
-                m.content("Hello, World!");
-                m.embed(|e| {
-                    e.title("Mastary");
-                    //e.description("");
-                    // e.image("attachment://ferris_eyes.png");a
-                    let data_vec: Vec<&str> = vec!["str1", "str2", "str3"];
-                    let data = data_vec.join("\n");
-                    e.field("a", data, true);
-                    
-                    e
-                });
-                // m.add_file(AttachmentType::Path(Path::new("./ferris_eyes.png")));
-                m
-            });
-
-            if let Err(why) = msg {
-                println!("Error sending message: {:?}", why);
-            }
-        } else if msg.content == "!さかとし" {
-            if let Err(why) = msg.channel_id.say(&ctx.http, "愛してる") {
-                println!("Error sending message: {:?}", why);
             }
         }
     }
