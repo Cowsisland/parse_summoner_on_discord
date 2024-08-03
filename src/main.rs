@@ -8,46 +8,31 @@ use std::collections::BTreeMap;
 use dotenv::dotenv;
 use reqwest::Error;
 
-use parse_summoner_on_discord::models::{champion_mastery_v4, summoner_v4::SummonerV4, v4_traits::V4Summoner};
-
-
-fn get_champ_id_map() -> BTreeMap<i64, String> {
-    let file = File::open("./data/champion_id.json").unwrap();
-    let reader = BufReader::new(file);
-
-    let champ_id_map: BTreeMap<i64, String> = serde_json::from_reader(reader).unwrap();
-    
-    champ_id_map
-}
-
-
+use parse_summoner_on_discord::{models::{champion_mastery_v4::ChampionMasteryV4, summoner_v4::SummonerV4, v4_traits::{V4Summoner, V4UseSummoner}}};
+use parse_summoner_on_discord::libs::get_champ_id_map;
 
 fn resp_mastery(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
-
     // to use env
     dotenv().ok();
 
     // Check Riot API
     let riot_token = &env::var("RIOT_TOKEN").expect("Please setting RIOT_TOKEN");
-    let champ_id_map = get_champ_id_map();
-    let region: &str = "asia";
+    let server_region: &str = "asia";
 
-    let summoner_v4_resp = SummonerV4::fetch(region, sn, tag, riot_token)?;
+    let summoner_v4_resp = SummonerV4::fetch(server_region, sn, tag, riot_token)?;
     println!("{:?}", summoner_v4_resp);
 
-    // let puuid = summoner_v4_resp.puuid;
-    // let champion_id = "92";
 
-    // let champion_mastery_v4_resp = ChampionMasteryV4::fetch(region, puuid, champion_id, riot_token)?;
-    // println!("{:?}", champion_mastery_v4_resp);
+    let puuid = &summoner_v4_resp.puuid;
+    let user_region = "jp1";
+    let count = "3";
 
-    // let loop_num: usize;
-    // if champion_mastery_v4_resp.len() < 5 {
-    //     loop_num = champion_mastery_v4_resp.len();
-    // } else {
-    //     loop_num = 5;
-    // }
+    let champion_mastery_v4_resp: Vec<ChampionMasteryV4> = ChampionMasteryV4::fetch(user_region, puuid, count, riot_token)?;
+    println!("{:?}", champion_mastery_v4_resp);
 
+    // iterで回してマスタリーのランキングとポイントを取得する
+    // マスタリーのランキングをcountの数だけ表示
+    let champ_id_map = get_champ_id_map::get_champ_id_map();
 
     // let mut data_vec = Vec::new();
     // for i in 0..loop_num {

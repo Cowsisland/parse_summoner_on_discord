@@ -21,10 +21,10 @@ enum Response {
 
 impl V4Summoner for SummonerV4 {
     type T = Self;
-    fn fetch(region: &str, sn: &str, tag: &str, riot_token: &str) -> Result<Self::T, Error> {
+    fn fetch(server_region: &str, sn: &str, tag: &str, riot_token: &str) -> Result<Self::T, Error> {
         let url = format! (
             "https://{}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{}/{}",
-            region,
+            server_region,
             sn,
             tag
         );
@@ -53,16 +53,5 @@ impl V4Summoner for SummonerV4 {
         };
 
         Ok(summoner_v4_response)
-    }
-}
-
-// 今回はDefaultを実装する
-impl Default for SummonerV4 {
-    fn default() -> Self {
-        Self {
-            puuid: String::default(),
-            game_name: String::default(),
-            tag_line: String::default(),
-        }
     }
 }
