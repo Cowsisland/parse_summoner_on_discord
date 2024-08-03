@@ -20,7 +20,7 @@ fn get_champ_id_map() -> BTreeMap<i64, String> {
 
 
 
-fn resp_mastery(sn: &str) -> Result<Vec<String>, Error> {
+fn resp_mastery(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
 
     // to use env
     dotenv().ok();
@@ -28,76 +28,76 @@ fn resp_mastery(sn: &str) -> Result<Vec<String>, Error> {
     // Check Riot API
     let api_key = &env::var("RIOT_API_KEY").expect("Please setting RIOT_API_KEY");
     let champ_id_map = get_champ_id_map();
-   
-    let name = sn;
-    let region = "jp";
+    let region: &str = "asia";
 
 
-    let summoner_v4_resp = SummonerV4::fetch(region, name, api_key)?;
+    let summoner_v4_resp = SummonerV4::fetch(region, sn, tag, api_key)?;
+    println!("{:?}", summoner_v4_resp);
 
-    let champion_mastery_v4_resp = ChampionMasteryV4::fetch(region, &summoner_v4_resp.id, api_key)?;
+    // let champion_mastery_v4_resp = ChampionMasteryV4::fetch(region, &summoner_v4_resp.id, api_key)?;
 
-    let loop_num: usize;
-    if champion_mastery_v4_resp.len() < 5 {
-        loop_num = champion_mastery_v4_resp.len();
-    } else {
-        loop_num = 5;
-    }
+    // let loop_num: usize;
+    // if champion_mastery_v4_resp.len() < 5 {
+    //     loop_num = champion_mastery_v4_resp.len();
+    // } else {
+    //     loop_num = 5;
+    // }
 
 
-    let mut data_vec = Vec::new();
-    for i in 0..loop_num {
-        let data_str = format!("{: <4} {: <12} {: <8} ({})",
-            (i+1).to_string() +")",
-            champ_id_map.get(&champion_mastery_v4_resp[i].champion_id).unwrap(),
-            champion_mastery_v4_resp[i].champion_points,
-            champion_mastery_v4_resp[i].champion_level
-        );
-        data_vec.push(data_str);
-    }
+    // let mut data_vec = Vec::new();
+    // for i in 0..loop_num {
+    //     let data_str = format!("{: <4} {: <12} {: <8} ({})",
+    //         (i+1).to_string() +")",
+    //         champ_id_map.get(&champion_mastery_v4_resp[i].champion_id).unwrap(),
+    //         champion_mastery_v4_resp[i].champion_points,
+    //         champion_mastery_v4_resp[i].champion_level
+    //     );
+    //     data_vec.push(data_str);
+    // }
 
+    let data_vec = vec![];
     Ok(data_vec)
 }
 
 
 
-fn resp_league(sn: &str) -> Result<Vec<String>, Error> {
+fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
+    todo!();
+    // // to use env
+    // dotenv().ok();
 
-    // to use env
-    dotenv().ok();
+    // // Check Riot API
+    // let api_key = &env::var("RIOT_API_KEY").expect("Please setting RIOT_API_KEY");
 
-    // Check Riot API
-    let api_key = &env::var("RIOT_API_KEY").expect("Please setting RIOT_API_KEY");
-   
+    // // let name = sn;
     // let name = sn;
-    let name = sn;
-    let region = "jp";
+    // let region = "jp";
 
 
-    let summoner_v4_resp = SummonerV4::fetch(region, name, api_key)?;
-    let league_v4_resp_vec = LeagueV4::fetch(region, &summoner_v4_resp.id, api_key)?;
+    // let summoner_v4_resp = SummonerV4::fetch(region, name, api_key)?;
+    // let league_v4_resp_vec = LeagueV4::fetch(region, &summoner_v4_resp.id, api_key)?;
 
 
-    let mut data_vec = Vec::new();
-    data_vec.push(
-        format!("{}    {}  {}    {}    {}",
-            "Queue", "Tier", "Division", "LP", "Win Rate"
-        )    
-    );
+    // let mut data_vec = Vec::new();
+    // data_vec.push(
+    //     format!("{}    {}  {}    {}    {}",
+    //         "Queue", "Tier", "Division", "LP", "Win Rate"
+    //     )    
+    // );
 
-    for league_v4_resp in league_v4_resp_vec {
-        let win_rate: i32 = league_v4_resp.wins*100 / (league_v4_resp.wins+league_v4_resp.losses);
-        let data_str = format!("{}    {}  {}    {}LP    {}%",
-            league_v4_resp.queue_type,
-            league_v4_resp.tier,
-            league_v4_resp.rank,
-            league_v4_resp.league_points,
-            win_rate
-        );
-        data_vec.push(data_str);
-    }
+    // for league_v4_resp in league_v4_resp_vec {
+    //     let win_rate: i32 = league_v4_resp.wins*100 / (league_v4_resp.wins+league_v4_resp.losses);
+    //     let data_str = format!("{}    {}  {}    {}LP    {}%",
+    //         league_v4_resp.queue_type,
+    //         league_v4_resp.tier,
+    //         league_v4_resp.rank,
+    //         league_v4_resp.league_points,
+    //         win_rate
+    //     );
+    //     data_vec.push(data_str);
+    // }
 
-    Ok(data_vec)
+    // Ok(data_vec)
 }
 
 
@@ -152,19 +152,20 @@ fn resp_league(sn: &str) -> Result<Vec<String>, Error> {
 //     }
 // }
 
-use parse_summoner_on_discord::models::{champion_mastery_v4::ChampionMasteryV4, league_v4::LeagueV4, summoner_v4::SummonerV4, v4_trait::V4};
+use parse_summoner_on_discord::models::{summoner_v4::SummonerV4, v4_trait::V4Summoner};
 fn main() {   
     // 環境変数取得のためのチェック
     dotenv().ok();
     let api_key = &env::var("RIOT_API_KEY").expect("Please setting RIOT_API_KEY");
     println!("{}", api_key);
 
-    // まだ動かない
     let sn = "HASAKI PTSD";
-    println!("{:?}", resp_mastery(sn));
-    println!("{:?}", resp_league(sn));
+    let tag = "JP1";
+    println!("{:?}", resp_mastery(sn, tag));
 
-    // Configure the client with your Discord bot token in the environment.
+    // まだ動かない
+    // println!("{:?}", resp_league(sn, tag));
+
     // let token = env::var("DISCORD_TOKEN")
     //     .expect("Expected a token in the environment");
     // let mut client = Client::new(&token, Handler).expect("Err creating client");

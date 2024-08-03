@@ -1,7 +1,7 @@
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
 
-use super::v4_trait::V4;
+use super::v4_trait::V4UseSummoner;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ChampionMasteryV4 {
@@ -16,19 +16,10 @@ pub struct ChampionMasteryV4 {
     pub summoner_id: String
 }
 
-impl V4 for ChampionMasteryV4 {
+impl V4UseSummoner for ChampionMasteryV4 {
     type T = Vec<Self>;
     fn fetch(region: &str, summoner_id: &str, api_key: &str) -> Result<Self::T, Error> {
-        let url = format! (
-            "https://{}1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/{}?api_key={}",
-            region,
-            summoner_id,
-            api_key
-        );
-
-        let resp: Vec<Self> = reqwest::blocking::get(&url)?.json()?;
-
-        Ok(resp)
+        todo!()
     }
 }
 

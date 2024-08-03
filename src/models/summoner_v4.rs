@@ -1,45 +1,53 @@
-use reqwest::Error;
+use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}, Error};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
-use super::v4_trait::V4;
+use super::v4_trait::V4Summoner;
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct SummonerV4 {
-    pub id: String,
-    pub account_id: String,
     pub puuid: String,
-    pub name: String,
-    pub profile_icon_id: i32,
-    pub revision_date: i64,
-    pub summoner_level: i64
+    pub game_name: String,
+    pub tag_line: String,
 }
 
-impl V4 for SummonerV4 {
+impl V4Summoner for SummonerV4 {
     type T = Self;
-    fn fetch(region: &str, name: &str, api_key: &str) -> Result<Self::T, Error> {
+    fn fetch(region: &str, sn_name: &str, tag: &str, api_key: &str) -> Result<Self::T, Error> {
         let url = format! (
-            "https://{}1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key={}",
+            "https://{}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{}/{}",
             region,
-            name,
-            api_key
+            sn_name,
+            tag
         );
 
-        let resp: Self = reqwest::blocking::get(&url)?.json()?;
+        // headerにapikeyを設定
+        // unwrapのエラー処理は後で行う
+        let mut headers = HeaderMap::new();
+        headers.insert("X-Riot-Token",  HeaderValue::from_str(api_key).unwrap());
 
-        Ok(resp)
+        // 一旦serde_json::Valueで受け取って型変換する
+        let client = Client::new();
+        let response = client
+            .get(&url)
+            .headers(headers)
+            .send()?
+            .json::<Value>()?;
+        println!("{}", response);
+        // unwrapのエラー処理は後で行う
+        let summoner_v4_response: SummonerV4 = serde_json::from_value(response).unwrap();
+
+        Ok(summoner_v4_response)
     }
 }
 
 impl Default for SummonerV4 {
     fn default() -> Self {
         Self {
-            id: String::default(),
-            account_id: String::default(),
             puuid: String::default(),
-            name: String::default(),
-            profile_icon_id: i32::default(),
-            revision_date: i64::default(),
-            summoner_level: i64::default(),
+            game_name: String::default(),
+            tag_line: String::default(),
         }
     }
 }
