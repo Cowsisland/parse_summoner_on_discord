@@ -20,6 +20,20 @@ pub struct LeagueV4 {
     pub hot_streak: bool
 }
 
+impl V4 for LeagueV4 {
+    type T = Vec<Self>;
+    fn fetch(region: &str, id: &str, api_key: &str) -> Result<Self::T, Error> {
+        let url = format!("https://{}1.api.riotgames.com/lol/league/v4/entries/by-summoner/{}?api_key={}",
+            region,
+            id,
+            api_key
+        );
+    
+        let resp: Vec<Self> = reqwest::blocking::get(&url)?.json()?;
+        Ok(resp)
+    }
+}
+
 impl Default for LeagueV4 {
     fn default() -> Self {
         Self {
@@ -37,19 +51,5 @@ impl Default for LeagueV4 {
             fresh_blood: bool::default(),
             hot_streak: bool::default()
         }
-    }
-}
-
-impl V4 for LeagueV4 {
-    type T = Vec<Self>;
-    fn fetch(region: &str, id: &str, api_key: &str) -> Result<Self::T, Error> {
-        let url = format!("https://{}1.api.riotgames.com/lol/league/v4/entries/by-summoner/{}?api_key={}",
-            region,
-            id,
-            api_key
-        );
-    
-        let resp: Vec<Self> = reqwest::blocking::get(&url)?.json()?;
-        Ok(resp)
     }
 }
