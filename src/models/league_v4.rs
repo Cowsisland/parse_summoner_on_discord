@@ -1,7 +1,7 @@
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
 
-use super::v4_trait::V4UseSummoner;
+use super::v4_traits::V4UseSummoner;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LeagueV4 {

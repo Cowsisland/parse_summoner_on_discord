@@ -8,6 +8,8 @@ use std::collections::BTreeMap;
 use dotenv::dotenv;
 use reqwest::Error;
 
+use parse_summoner_on_discord::models::{summoner_v4::SummonerV4, v4_traits::V4Summoner};
+
 
 fn get_champ_id_map() -> BTreeMap<i64, String> {
     let file = File::open("./data/champion_id.json").unwrap();
@@ -152,7 +154,6 @@ fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
 //     }
 // }
 
-use parse_summoner_on_discord::models::{summoner_v4::SummonerV4, v4_trait::V4Summoner};
 fn main() {   
     // 環境変数取得のためのチェック
     dotenv().ok();

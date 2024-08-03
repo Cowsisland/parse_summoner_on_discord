@@ -2,7 +2,7 @@ use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}, Error};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use super::v4_trait::V4Summoner;
+use super::v4_traits::V4Summoner;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
