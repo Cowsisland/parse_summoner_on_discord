@@ -34,7 +34,7 @@ impl V4Summoner for SummonerV4 {
         let mut headers = HeaderMap::new();
         headers.insert("X-Riot-Token",  HeaderValue::from_str(riot_token).unwrap());
 
-        // 一旦serde_json::Valueで受け取って型変換する
+        // Response型で受け取る（成功→SummonerV4、失敗→Value）
         let client = Client::new();
         let response = client
             .get(&url)
