@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 use dotenv::dotenv;
 use reqwest::Error;
 
-use parse_summoner_on_discord::models::{summoner_v4::SummonerV4, v4_traits::V4Summoner};
+use parse_summoner_on_discord::models::{champion_mastery_v4, summoner_v4::SummonerV4, v4_traits::V4Summoner};
 
 
 fn get_champ_id_map() -> BTreeMap<i64, String> {
@@ -28,15 +28,18 @@ fn resp_mastery(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
     dotenv().ok();
 
     // Check Riot API
-    let api_key = &env::var("RIOT_API_KEY").expect("Please setting RIOT_API_KEY");
+    let riot_token = &env::var("RIOT_TOKEN").expect("Please setting RIOT_TOKEN");
     let champ_id_map = get_champ_id_map();
     let region: &str = "asia";
 
-
-    let summoner_v4_resp = SummonerV4::fetch(region, sn, tag, api_key)?;
+    let summoner_v4_resp = SummonerV4::fetch(region, sn, tag, riot_token)?;
     println!("{:?}", summoner_v4_resp);
 
-    // let champion_mastery_v4_resp = ChampionMasteryV4::fetch(region, &summoner_v4_resp.id, api_key)?;
+    // let puuid = summoner_v4_resp.puuid;
+    // let champion_id = "92";
+
+    // let champion_mastery_v4_resp = ChampionMasteryV4::fetch(region, puuid, champion_id, riot_token)?;
+    // println!("{:?}", champion_mastery_v4_resp);
 
     // let loop_num: usize;
     // if champion_mastery_v4_resp.len() < 5 {
@@ -157,8 +160,8 @@ fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
 fn main() {   
     // 環境変数取得のためのチェック
     dotenv().ok();
-    let api_key = &env::var("RIOT_API_KEY").expect("Please setting RIOT_API_KEY");
-    println!("{}", api_key);
+    let riot_token = &env::var("RIOT_TOKEN").expect("Please setting RIOT_TOKEN");
+    println!("{}", riot_token);
 
     let sn = "HASAKI PTSD";
     let tag = "JP1";

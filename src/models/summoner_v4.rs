@@ -21,7 +21,7 @@ enum Response {
 
 impl V4Summoner for SummonerV4 {
     type T = Self;
-    fn fetch(region: &str, sn: &str, tag: &str, api_key: &str) -> Result<Self::T, Error> {
+    fn fetch(region: &str, sn: &str, tag: &str, riot_token: &str) -> Result<Self::T, Error> {
         let url = format! (
             "https://{}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{}/{}",
             region,
@@ -32,7 +32,7 @@ impl V4Summoner for SummonerV4 {
         // headerにapikeyを設定
         // unwrapのエラー処理は後で行う
         let mut headers = HeaderMap::new();
-        headers.insert("X-Riot-Token",  HeaderValue::from_str(api_key).unwrap());
+        headers.insert("X-Riot-Token",  HeaderValue::from_str(riot_token).unwrap());
 
         // 一旦serde_json::Valueで受け取って型変換する
         let client = Client::new();
