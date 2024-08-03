@@ -12,9 +12,8 @@ pub struct SummonerV4 {
     pub tag_line: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 #[serde(untagged)]
-#[derive(Debug)]
 enum Response {
     Success(SummonerV4),
     Error(Value),
@@ -22,11 +21,11 @@ enum Response {
 
 impl V4Summoner for SummonerV4 {
     type T = Self;
-    fn fetch(region: &str, sn_name: &str, tag: &str, api_key: &str) -> Result<Self::T, Error> {
+    fn fetch(region: &str, sn: &str, tag: &str, api_key: &str) -> Result<Self::T, Error> {
         let url = format! (
             "https://{}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{}/{}",
             region,
-            sn_name,
+            sn,
             tag
         );
 
