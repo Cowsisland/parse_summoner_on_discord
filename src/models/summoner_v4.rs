@@ -12,6 +12,14 @@ pub struct SummonerV4 {
     pub tag_line: String,
 }
 
+#[derive(Deserialize)]
+#[serde(untagged)]
+#[derive(Debug)]
+enum Response {
+    Success(SummonerV4),
+    Error(Value),
+}
+
 impl V4Summoner for SummonerV4 {
     type T = Self;
     fn fetch(region: &str, sn_name: &str, tag: &str, api_key: &str) -> Result<Self::T, Error> {
@@ -33,15 +41,23 @@ impl V4Summoner for SummonerV4 {
             .get(&url)
             .headers(headers)
             .send()?
-            .json::<Value>()?;
-        println!("{}", response);
-        // unwrapのエラー処理は後で行う
-        let summoner_v4_response: SummonerV4 = serde_json::from_value(response).unwrap();
+            .json::<Response>()?;
+
+        // enum Responseのdebug用
+        // println!("{:?}", response);
+
+        // enumで成功したときだけ型で通して、エラーが来たらその内容を出力する。
+        // Errorの実装を行う
+        let summoner_v4_response = match response {
+            Response::Success(data) => data,
+            Response::Error(error) => panic!("{}", error),
+        };
 
         Ok(summoner_v4_response)
     }
 }
 
+// 今回はDefaultを実装する
 impl Default for SummonerV4 {
     fn default() -> Self {
         Self {
