@@ -1,12 +1,12 @@
 use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}, Error};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use super::v4_traits::V4Summoner;
+use super::riot_api_trait::V1Account;
 use crate::RIOT_TOKEN;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct SummonerV4 {
+pub struct AccountV1 {
     pub puuid: String,
     pub game_name: String,
     pub tag_line: String,
@@ -15,11 +15,11 @@ pub struct SummonerV4 {
 #[derive(Deserialize, Debug)]
 #[serde(untagged)]
 enum Response {
-    Success(SummonerV4),
+    Success(AccountV1),
     Error(Value),
 }
 
-impl V4Summoner for SummonerV4 {
+impl V1Account for AccountV1 {
     type T = Self;
     fn fetch(server_region: &str, sn: &str, tag: &str) -> Result<Self::T, Error> {
         let url = format! (

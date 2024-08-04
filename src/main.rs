@@ -1,9 +1,8 @@
 extern crate url;
 extern crate reqwest;
 
-use std::{collections::BTreeMap, env};
+use std::env;
 use dotenv::dotenv;
-use libs::get_champ_id_map;
 use logic::{calc_mastery, calc_rank};
 use once_cell::sync::Lazy;
 
@@ -21,15 +20,11 @@ static DISCORD_TOKEN: Lazy<String> = Lazy::new(|| {
     env::var("DISCORD_TOKEN").expect("Please setting DISCORD_TOKEN")
 });
 
-pub static CHAMPION_HASHMAP: Lazy<BTreeMap<u32, String>> = Lazy::new(|| {
-    get_champ_id_map::get_champ_id_map()
-});
-
 fn main() {
     let sn = "HASAKI PTSD";
     let tag = "JP1";
     println!("{:?}", calc_mastery::resp_mastery(sn, tag));
-    // println!("{:?}", calc_rank::resp_league(sn, tag, &*RIOT_TOKEN));
+    println!("{:?}", calc_rank::resp_league(sn, tag));
 
     // まだ動かない
     // lazyの型は DISCORD_TOKEN の実体を見る必要がある

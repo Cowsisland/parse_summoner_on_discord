@@ -1,20 +1,21 @@
 use reqwest::Error;
 
-pub fn resp_league(sn: &str, tag: &str, riot_token: &str) -> Result<Vec<String>, Error> {
-    todo!();
-    // // to use env
-    // dotenv().ok();
+use crate::models::{account_v1::AccountV1, champion_mastery_v4::ChampionMasteryV4, riot_api_trait::{V1Account, V4UseSummoner}};
 
-    // // Check Riot API
-    // let api_key = &env::var("RIOT_API_KEY").expect("Please setting RIOT_API_KEY");
+pub fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
+    // アカウント情報の取得
+    let server_region: &str = "asia";
+    let account_v1_resp = AccountV1::fetch(server_region, sn, tag)?;
+    // println!("{:?}", account_v1_resp);  // debug
 
-    // // let name = sn;
-    // let name = sn;
-    // let region = "jp";
-
-
-    // let summoner_v4_resp = SummonerV4::fetch(region, name, api_key)?;
-    // let league_v4_resp_vec = LeagueV4::fetch(region, &summoner_v4_resp.id, api_key)?;
+    // マスタリー情報の取得
+    let puuid = &account_v1_resp.puuid;
+    let user_region = "jp1";
+    let count: usize = 3;
+    let champion_mastery_v4_resp: Vec<ChampionMasteryV4> = ChampionMasteryV4::fetch(user_region, puuid, &count.to_string())?;
+    // println!("{:?}", champion_mastery_v4_resp);  // debug
+    
+    // let league_v4_resp_vec = LeagueV4::fetch(region, &account_v1_resp.id, api_key)?;
 
 
     // let mut data_vec = Vec::new();
@@ -36,5 +37,6 @@ pub fn resp_league(sn: &str, tag: &str, riot_token: &str) -> Result<Vec<String>,
     //     data_vec.push(data_str);
     // }
 
-    // Ok(data_vec)
+    let data = vec![];
+    Ok(data)
 }

@@ -2,7 +2,7 @@ use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}, Error};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
-use super::v4_traits::V4UseSummoner;
+use super::riot_api_trait::V4UseSummoner;
 use crate::RIOT_TOKEN;
 
 #[derive(Serialize, Deserialize, Debug)]

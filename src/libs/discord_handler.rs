@@ -33,7 +33,7 @@ impl EventHandler for Handler {
             let sn: Vec<&str> = msg.content.split(":").collect();
             let tag = "jp1"; // tag取得の実装
             if sn.len() >= 2 {
-                match calc_rank::resp_league(sn[1], tag, &*RIOT_TOKEN) {
+                match calc_rank::resp_league(sn[1], tag) {
                     Ok(data_vec) => {
                         let data = data_vec.join("\n");
                         if let Err(why) = msg.channel_id.say(&ctx.http, data) {
