@@ -51,8 +51,6 @@ enum Response {
 impl V4UseSummoner for ChampionMasteryV4 {
     type T = Vec<Self>;
     fn fetch(user_region: &str, puuid: &str, count: &str, riot_token: &str) -> Result<Self::T, Error> {
-        // https://jp1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/ZD86xG3DzyjbyJ_znmGaF2fY1gMyIzsyv0h-fCDZ5NQnN539oLURYsL_83u7UORCG8YiO8HXO1Tz7Q/top?count=1&api_key=RGAPI-fc05dc56-5905-4da1-8a18-c1fceed74b28
-
         let url = format! (
             "https://{}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{}/top?count={}",
             user_region,
