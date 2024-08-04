@@ -1,6 +1,6 @@
 use reqwest::Error;
 
-use crate::models::{account_v1::AccountV1, champion_mastery_v4::ChampionMasteryV4, riot_api_trait::{V1Account, V4UseSummoner}};
+use crate::models::{account_v1::AccountV1, champion_mastery_v4::ChampionMasteryV4, riot_api_trait::{V1Account, V4Summoner}, summoner_v4::SummonerV4};
 
 pub fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
     // アカウント情報の取得
@@ -11,10 +11,12 @@ pub fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
     // マスタリー情報の取得
     let puuid = &account_v1_resp.puuid;
     let user_region = "jp1";
-    let count: usize = 3;
-    let champion_mastery_v4_resp: Vec<ChampionMasteryV4> = ChampionMasteryV4::fetch(user_region, puuid, &count.to_string())?;
-    // println!("{:?}", champion_mastery_v4_resp);  // debug
-    
+    let summoner_v4_resp: SummonerV4 = SummonerV4::fetch(user_region, puuid)?;
+    // println!("{:?}", summoner_v4_resp);  // debug
+
+    let summoner_id = summoner_v4_resp.id;
+
+    // ここから実装
     // let league_v4_resp_vec = LeagueV4::fetch(region, &account_v1_resp.id, api_key)?;
 
 

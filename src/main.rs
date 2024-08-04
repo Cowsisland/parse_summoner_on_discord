@@ -21,7 +21,7 @@ static DISCORD_TOKEN: Lazy<String> = Lazy::new(|| {
 });
 
 fn main() {
-    let sn = "HASAKI PTSD";
+    let sn = "The Runic Blade";
     let tag = "JP1";
     println!("{:?}", calc_mastery::resp_mastery(sn, tag));
     println!("{:?}", calc_rank::resp_league(sn, tag));
