@@ -1,8 +1,8 @@
 use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}, Error};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-
 use super::v4_traits::V4Summoner;
+use crate::RIOT_TOKEN;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -21,7 +21,7 @@ enum Response {
 
 impl V4Summoner for SummonerV4 {
     type T = Self;
-    fn fetch(server_region: &str, sn: &str, tag: &str, riot_token: &str) -> Result<Self::T, Error> {
+    fn fetch(server_region: &str, sn: &str, tag: &str) -> Result<Self::T, Error> {
         let url = format! (
             "https://{}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{}/{}",
             server_region,
@@ -29,10 +29,10 @@ impl V4Summoner for SummonerV4 {
             tag
         );
 
-        // headerにapikeyを設定
+        // headerにRIOT_TOKEN(グローバル変数)を設定
         // unwrapのエラー処理は後で行う
         let mut headers = HeaderMap::new();
-        headers.insert("X-Riot-Token",  HeaderValue::from_str(riot_token).unwrap());
+        headers.insert("X-Riot-Token",  HeaderValue::from_str(&*RIOT_TOKEN).unwrap());
 
         // Response型で受け取る（成功→SummonerV4、失敗→Value）
         let client = Client::new();

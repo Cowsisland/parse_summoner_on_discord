@@ -2,8 +2,8 @@ use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}, Error};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
-
 use super::v4_traits::V4UseSummoner;
+use crate::RIOT_TOKEN;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -50,7 +50,7 @@ enum Response {
 
 impl V4UseSummoner for ChampionMasteryV4 {
     type T = Vec<Self>;
-    fn fetch(user_region: &str, puuid: &str, count: &str, riot_token: &str) -> Result<Self::T, Error> {
+    fn fetch(user_region: &str, puuid: &str, count: &str) -> Result<Self::T, Error> {
         let url = format! (
             "https://{}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{}/top?count={}",
             user_region,
@@ -61,7 +61,7 @@ impl V4UseSummoner for ChampionMasteryV4 {
         // headerにapikeyを設定
         // unwrapのエラー処理は後で行う
         let mut headers = HeaderMap::new();
-        headers.insert("X-Riot-Token",  HeaderValue::from_str(riot_token).unwrap());
+        headers.insert("X-Riot-Token",  HeaderValue::from_str(&*RIOT_TOKEN).unwrap());
 
         // Response型で受け取る（成功→ChampionMasteryV4、失敗→Value）
         let client = Client::new();

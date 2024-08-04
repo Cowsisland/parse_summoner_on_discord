@@ -1,25 +1,29 @@
 extern crate url;
 extern crate reqwest;
 use reqwest::Error;
-use crate::models::{champion_mastery_v4::ChampionMasteryV4, summoner_v4::SummonerV4, v4_traits::{V4Summoner, V4UseSummoner}};
-use crate::libs::get_champ_id_map;
+use crate::models::{
+    champion_mastery_v4::ChampionMasteryV4, 
+    summoner_v4::SummonerV4, 
+    v4_traits::{V4Summoner, V4UseSummoner}
+};
+use crate::CHAMPION_HASHMAP;
 
-pub fn resp_mastery(sn: &str, tag: &str, riot_token: &str) -> Result<Vec<String>, Error> {
+pub fn resp_mastery(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
     // アカウント情報の取得
     let server_region: &str = "asia";
-    let summoner_v4_resp = SummonerV4::fetch(server_region, sn, tag, riot_token)?;
+    let summoner_v4_resp = SummonerV4::fetch(server_region, sn, tag)?;
     // println!("{:?}", summoner_v4_resp);  // debug
 
     // マスタリー情報の取得
     let puuid = &summoner_v4_resp.puuid;
     let user_region = "jp1";
     let count: usize = 3;
-    let champion_mastery_v4_resp: Vec<ChampionMasteryV4> = ChampionMasteryV4::fetch(user_region, puuid, &count.to_string(), riot_token)?;
+    let champion_mastery_v4_resp: Vec<ChampionMasteryV4> = ChampionMasteryV4::fetch(user_region, puuid, &count.to_string())?;
     // println!("{:?}", champion_mastery_v4_resp);  // debug
 
-    // iterで回してマスタリーのランキングとポイントを取得する
-    // マスタリーのランキングをcountの数だけ表示
-    let champ_id_map = get_champ_id_map::get_champ_id_map();
+    // チャンピオンとidの対応マップを取得（グローバル変数）
+    // getしかしないため、参照を扱う
+    let champ_id_map = &*CHAMPION_HASHMAP;
 
     let mut data_vec = Vec::new();
     for i in 0..count {

@@ -22,7 +22,7 @@ pub struct LeagueV4 {
 
 impl V4UseSummoner for LeagueV4 {
     type T = Vec<Self>;
-    fn fetch(region: &str, puuid: &str, count: &str, riot_token: &str) -> Result<Self::T, Error> {
+    fn fetch(region: &str, puuid: &str, count: &str) -> Result<Self::T, Error> {
         todo!()
     }
 }
