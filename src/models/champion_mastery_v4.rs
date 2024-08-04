@@ -8,36 +8,36 @@ use super::v4_traits::V4UseSummoner;
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct RewardConfig {
-    reward_value: String,
-    reward_type: String,
-    maximum_reward: u32,
+    pub reward_value: String,
+    pub reward_type: String,
+    pub maximum_reward: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct NextSeasonMilestone {
-    require_grade_counts: HashMap<String, u32>,
-    reward_marks: u32,
-    bonus: bool,
-    reward_config: RewardConfig,
-    total_games_requires: u32,
+    pub require_grade_counts: HashMap<String, u32>,
+    pub reward_marks: u32,
+    pub bonus: bool,
+    pub reward_config: RewardConfig,
+    pub total_games_requires: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChampionMasteryV4 {
-    puuid: String,
-    champion_id: u32,
-    champion_level: u32,
-    champion_points: u32,
-    last_play_time: i64,
-    champion_points_since_last_level: i64,
-    champion_points_until_next_level: i64,
-    mark_required_for_next_level: u32,
-    tokens_earned: u32,
-    champion_season_milestone: u32,
-    milestone_grades: Option<Vec<String>>,
-    next_season_milestone: NextSeasonMilestone,
+    pub puuid: String,
+    pub champion_id: u32,
+    pub champion_level: u32,
+    pub champion_points: u32,
+    pub last_play_time: i64,
+    pub champion_points_since_last_level: i64,
+    pub champion_points_until_next_level: i64,
+    pub mark_required_for_next_level: u32,
+    pub tokens_earned: u32,
+    pub champion_season_milestone: u32,
+    pub milestone_grades: Option<Vec<String>>,
+    pub next_season_milestone: NextSeasonMilestone,
 }
 
 #[derive(Deserialize)]

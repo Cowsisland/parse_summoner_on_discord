@@ -801,6 +801,7 @@ name = "parse_summoner_on_discord"
 version = "0.1.0"
 dependencies = [
  "dotenv",
+ "once_cell",
  "reqwest",
  "serde",
  "serde_json",
