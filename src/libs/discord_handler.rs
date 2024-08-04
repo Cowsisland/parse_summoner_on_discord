@@ -3,7 +3,6 @@ use serenity::{
     model::{channel::Message, gateway::Ready},
     prelude::*,
 };
-use crate::RIOT_TOKEN;
 
 pub struct Handler;
 

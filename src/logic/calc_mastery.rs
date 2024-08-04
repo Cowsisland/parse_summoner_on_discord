@@ -4,7 +4,7 @@ use reqwest::Error;
 use crate::{
     libs::get_champ_id_map, 
     models::{
-        account_v1::{self, AccountV1}, champion_mastery_v4::ChampionMasteryV4, riot_api_trait::{V1Account, V4UseSummoner}
+        account_v1::AccountV1, champion_mastery_v4::ChampionMasteryV4, riot_api_trait::{V1Account, V4UseSummoner}
     }
 };
 
