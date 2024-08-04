@@ -37,7 +37,7 @@ pub struct ChampionMasteryV4 {
     pub tokens_earned: u32,
     pub champion_season_milestone: u32,
     pub milestone_grades: Option<Vec<String>>,
-    pub next_season_milestone: NextSeasonMilestone,
+    next_season_milestone: NextSeasonMilestone,
 }
 
 #[derive(Deserialize)]

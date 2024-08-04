@@ -1,6 +1,6 @@
 use reqwest::Error;
 
-pub fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
+pub fn resp_league(sn: &str, tag: &str, riot_token: &str) -> Result<Vec<String>, Error> {
     todo!();
     // // to use env
     // dotenv().ok();
