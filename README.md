@@ -1,4 +1,13 @@
 # ParseSummonerOnDiscord
+## 2024/08/18
+ApiErrorの型を実装した。この後色々改良するが、いったんcargo runまで通したのでよし。単体テストを別途記述する。
+
+### やること
+1. ~~enumのApiErrorを実装。~~
+2. エラーコードの記述（Statusが200以外の時はserde_json::Valueで取得してエラー記述する？）
+3. それぞれのAPIを実装する。
+4. respからロジック部分をまとめる
+5. Discordとの連携
 
 ### 2024/08/04
 resp_masteryの実装完了。ファイル構成も修正済。エラー処理とunwrapについては課題。
@@ -35,13 +44,3 @@ SummonerV4の実装をひとまず通せるラインまで完了。エラー処�
 4. respからロジック部分をまとめる
 5. Discordとの連携
 6. エラーコードの記述（Statusが200以外の時はserde_json::Valueで取得してエラー記述する？）
-
-## 2024/08/18
-ApiErrorの型を実装した。この後色々改良するが、いったんcargo runまで通したのでよし。単体テストを別途記述する。
-
-### やること
-1. ~~enumのApiErrorを実装。~~
-2. エラーコードの記述（Statusが200以外の時はserde_json::Valueで取得してエラー記述する？）
-3. それぞれのAPIを実装する。
-4. respからロジック部分をまとめる
-5. Discordとの連携
