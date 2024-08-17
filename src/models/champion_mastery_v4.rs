@@ -1,9 +1,9 @@
-use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}, Error};
+use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 use super::riot_api_trait::V4UseSummoner;
-use crate::RIOT_TOKEN;
+use crate::{errors::api_error::ApiError, RIOT_TOKEN};
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -50,7 +50,7 @@ enum Response {
 
 impl V4UseSummoner for ChampionMasteryV4 {
     type T = Vec<Self>;
-    fn fetch(user_region: &str, puuid: &str, count: &str) -> Result<Self::T, Error> {
+    fn fetch(user_region: &str, puuid: &str, count: &str) -> Result<Self::T, ApiError> {
         let url = format! (
             "https://{}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{}/top?count={}",
             user_region,

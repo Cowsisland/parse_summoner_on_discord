@@ -9,6 +9,7 @@ use once_cell::sync::Lazy;
 mod libs;
 mod logic;
 mod models;
+mod errors;
 
 pub static RIOT_TOKEN: Lazy<String> = Lazy::new(|| {
     dotenv().ok();

@@ -1,14 +1,13 @@
 extern crate url;
 extern crate reqwest;
-use reqwest::Error;
+
 use crate::{
-    libs::get_champ_id_map, 
-    models::{
+    errors::api_error::ApiError, libs::get_champ_id_map, models::{
         account_v1::AccountV1, champion_mastery_v4::ChampionMasteryV4, riot_api_trait::{V1Account, V4UseSummoner}
     }
 };
 
-pub fn resp_mastery(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
+pub fn resp_mastery(sn: &str, tag: &str) -> Result<Vec<String>, ApiError> {
     // アカウント情報の取得
     let server_region: &str = "asia";
     let account_v1_resp = AccountV1::fetch(server_region, sn, tag)?;

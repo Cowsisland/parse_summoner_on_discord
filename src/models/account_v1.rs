@@ -1,8 +1,8 @@
-use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}, Error};
+use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use super::riot_api_trait::V1Account;
-use crate::RIOT_TOKEN;
+use crate::{errors::api_error::{ApiErrorResponse, ApiError}, RIOT_TOKEN};
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -21,7 +21,7 @@ enum Response {
 
 impl V1Account for AccountV1 {
     type T = Self;
-    fn fetch(server_region: &str, sn: &str, tag: &str) -> Result<Self::T, Error> {
+    fn fetch(server_region: &str, sn: &str, tag: &str) -> Result<Self::T, ApiError> {
         let url = format! (
             "https://{}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{}/{}",
             server_region,
@@ -39,19 +39,30 @@ impl V1Account for AccountV1 {
         let response = client
             .get(&url)
             .headers(headers)
-            .send()?
-            .json::<Response>()?;
+            .send()?;
 
         // enum Responseのdebug用
         // println!("{:?}", response);
 
-        // enumで成功したときだけ型で通して、エラーが来たらその内容を出力する。
-        // Errorの実装を行う
-        let summoner_v4_response = match response {
-            Response::Success(data) => data,
-            Response::Error(error) => panic!("{}", error),
-        };
+        let status = response.status();
+        if status.is_success() {
+            let success = response.json::<Self::T>()?;
+            Ok(success)
+        } else {
+            let error = response.json::<ApiErrorResponse>()?;
+            Err(ApiError::RequestFailed {
+                status: status,
+                message: error.status.message,
+            })
+        }
 
-        Ok(summoner_v4_response)
+        // // enumで成功したときだけ型で通して、エラーが来たらその内容を出力する。
+        // // Errorの実装を行う
+        // let summoner_v4_response = match response {
+        //     Response::Success(data) => data,
+        //     Response::Error(error) => panic!("{}", error),
+        // };
+
+        // Ok(summoner_v4_response)
     }
 }

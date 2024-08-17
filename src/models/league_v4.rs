@@ -1,5 +1,6 @@
-use reqwest::Error;
 use serde::{Deserialize, Serialize};
+
+use crate::errors::api_error::ApiError;
 
 use super::riot_api_trait::V4UseSummoner;
 
@@ -22,7 +23,7 @@ pub struct LeagueV4 {
 
 impl V4UseSummoner for LeagueV4 {
     type T = Vec<Self>;
-    fn fetch(region: &str, puuid: &str, count: &str) -> Result<Self::T, Error> {
+    fn fetch(region: &str, puuid: &str, count: &str) -> Result<Self::T, ApiError> {
         todo!();
     }
 }

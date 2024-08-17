@@ -1,8 +1,7 @@
-use reqwest::Error;
+use crate::errors::api_error::ApiError;
+use crate::models::{account_v1::AccountV1, riot_api_trait::{V1Account, V4Summoner}, summoner_v4::SummonerV4};
 
-use crate::models::{account_v1::AccountV1, champion_mastery_v4::ChampionMasteryV4, riot_api_trait::{V1Account, V4Summoner}, summoner_v4::SummonerV4};
-
-pub fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
+pub fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, ApiError> {
     // アカウント情報の取得
     let server_region: &str = "asia";
     let account_v1_resp = AccountV1::fetch(server_region, sn, tag)?;
@@ -12,7 +11,7 @@ pub fn resp_league(sn: &str, tag: &str) -> Result<Vec<String>, Error> {
     let puuid = &account_v1_resp.puuid;
     let user_region = "jp1";
     let summoner_v4_resp: SummonerV4 = SummonerV4::fetch(user_region, puuid)?;
-    // println!("{:?}", summoner_v4_resp);  // debug
+    println!("{:?}", summoner_v4_resp);  // debug
 
     let summoner_id = summoner_v4_resp.id;
 
